@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*-coding:UTF-8 -*
 #
 #  BerryCam.py
 #  BerryCam - Raspberry Pi Camera Controller for use with iOS devices
@@ -27,7 +28,8 @@ import SimpleHTTPServer, SocketServer
 import urlparse
 import os
 
-PORT = 8000 # CHange this if you wish to listen on a different port
+tlFolder = "/media/usb/berrycam/timelapse/"
+port = 8000 # CHange this if you wish to listen on a different port
 
 class BerryCamHandler (SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -61,7 +63,7 @@ class BerryCamHandler (SimpleHTTPServer.SimpleHTTPRequestHandler):
             if "tl" in queryParsed:
                 tl = queryParsed['tl'][0]
                 t = queryParsed['t'][0]
-                folder = "/media/usb/berrycam/timelapse/" + str(filefolder)
+                folder = tlFolder + str(filefolder)
                 if not os.path.exists(folder):
                     os.makedirs(folder)
             else:
@@ -103,7 +105,7 @@ class BerryCamHandler (SimpleHTTPServer.SimpleHTTPRequestHandler):
             if tl:
                 command += " -tl " + tl
                 command += " -t " + t
-                command += " -o " + folder + "/IMG-\%d.jpg"
+                command += " -o " + folder + "/IMG-\05%d.jpg"
             else:
                 command += " -o " + folder + "/IMG-" + str(fileseq) +".jpg"
             
@@ -117,9 +119,9 @@ class BerryCamHandler (SimpleHTTPServer.SimpleHTTPRequestHandler):
     def processRequest(self, query):
         self.send_response(200)
 
-httpd = SocketServer.TCPServer(("", PORT), BerryCamHandler)
+httpd = SocketServer.TCPServer(("", port), BerryCamHandler)
 
-print "B E R R Y C A M -- Listening on port", PORT
+print "BERRYCAM Listening on port", port
 print "Please ensure your BerryCam App is installed and running on your iOS Device"
 
 httpd.serve_forever()
