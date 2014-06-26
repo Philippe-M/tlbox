@@ -1,0 +1,129 @@
+<!doctype html>
+<!--[if lte IE 7]> <html class="no-js ie67 ie678" lang="fr"> <![endif]-->
+<!--[if IE 8]> <html class="no-js ie8 ie678" lang="fr"> <![endif]-->
+<!--[if IE 9]> <html class="no-js ie9" lang="fr"> <![endif]-->
+<!--[if gt IE 9]> <!--><html class="no-js" lang="fr"> <!--<![endif]-->
+<head>
+		<meta charset="UTF-8">
+		<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+		<title>{% block titre %}TlBox{% endblock %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!--[if lt IE 9]>
+		<script src="{{ url_for('static', filename='html5.js') }}"></script>
+		<![endif]-->
+		<link href="{{ url_for('static', filename='knacss.css') }}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	{% for message in get_flashed_messages() %}
+	<div class=flash>{{ message }}</div>
+	{% endfor %}
+	
+	{% block corps %}
+	<form method="post" action="{{ url_for('takepicture') }}">
+		<fieldset>
+			<legend>Type</legend>
+			<label for="timelapse_active">Timelapse active</label>
+			<input type="checkbox" name="timelapse_active"><br>
+			<label for="timelapse">Prendre une photo tout les x ms</label>
+			<input type="text" name="timelapse" value="1000"><br>
+			<label for="timeout">Durée de prise de vue en ms</label>
+			<input type="text" name="timeout"><br>
+		</fieldset>
+		<hr>
+		<fieldset>
+			<label for="fileseq">Nom du fichier</label>
+			<input type="text" name="fileseq" value="test"><br>
+			<label for="filefolder">Répertoire</label>			
+			<input type="text" name="filefolder" value="01"><br>
+			<label for="awb">Balance des blancs</label>
+			<select name="awb">
+				<option value="off">Off</option>
+				<option value="auto" selected="selected">Auto</option>
+				<option value="sun">Sun</option>
+				<option value="cloud">Cloud</option>
+				<option value="shade">Shade</option>
+				<option value="tungsten">Tungsten</option>
+				<option value="fluorescent">Fluorescent</option>
+				<option value="incandescent">Incandescent</option>
+				<option value="flash">Flash</option>
+				<option value="horizon">Horizon</option>
+			</select><br>		
+			<label for="metering">metergin</label>
+			<select name="metering">
+				<option value="average" selected="selected">Average</option>
+				<option value="spot">Spot</option>
+				<option value="backlit">Backlit</option>
+				<option value="matrix">Matrix</option>
+			</select><br>
+			<label for="ev">Ev</label>
+			<input type="text" name="ev" value="3"><br>
+			<label for="exposure">Exposure</label>
+			<select name="exposure">
+				<option value="auto" selected="selected">Auto</option>
+				<option value="night">Night</option>
+				<option value="nightpreview">Night preview</option>
+				<option value="backlight">Backlight</option>
+				<option value="spotlight">Spotlight</option>
+				<option value="sports">Sports</option>
+				<option value="snow">Snow</option>
+				<option value="beach">Beach</option>
+				<option value="verylong">Very Long</option>
+				<option value="fixedfps">Fixed FPS</option>
+				<option value="antishake">Antishake</option>
+				<option value="fireworks">Fireworks</option>
+			</select><br>
+			<label for="sharpness">Sharpness</label>
+			<input type="text" name="sharpness" value="0"><br>
+			<label for="brightness">Brightness</label>
+			<input type="text" name="brightness" value="50"><br>
+			<label for="contrast">Contrast</label>
+			<input type="text" name="contrast" value="0"><br>
+			<label for="saturation">Saturation</label>
+			<input type="text" name="saturation" value="0"><br>
+			<label for="iso">ISO</label>
+			<input type="text" name="iso" value="100"><br>
+			<label for="imxfx">ImxFx</label>
+			<select name="imxfx">
+				<option value="none" selected="selected">None</option>
+				<option value="negative">Negative</option>
+				<option value="solarise">Solarise</option>
+				<option value="sketch">Sketch</option>
+				<option value="denoise">Denoise</option>
+				<option value="emboss">Emboss</option>
+				<option value="oilpaint">Oilpant</option>
+				<option value="hatch">Hatch</option>
+				<option value="gpen">Gpen</option>
+				<option value="pastel">Pastel</option>
+				<option value="watercolour">Watercolour</option>
+				<option value="film">Film</option>
+				<option value="blur">Blur</option>
+				<option value="saturation">Saturation</option>
+				<option value="washedout">Washedout</option>
+				<option value="posterise">Posterise</option>
+				<option value="colourpoint">Colourpoint</option>
+				<option value="colourbalance">Colourbalance</option>
+				<option value="cartoon">Cartoon</option>
+			</select><br>
+			<label for="quality">Quality</label>
+			<input type="text" name="quality" value="100"><br>
+			<label for="raw">Raw</label>
+			<input type="checkbox" name="raw" value=""><br>			
+			<label for="width">Width</label>
+			<input type="text" name="width" value="800"><br>
+			<label for="height">Height</label>
+			<input type="text" name="height" value="600"><br>
+			<label for="hflip">Hflip</label>
+			<input type="checkbox" name="hflip" value=""><br>
+			<label for="vflip">Vflip</label>
+			<input type="checkbox" name="vflip" value=""><br>
+			<input type="submit">			
+		</fieldset>		
+	</form>
+	{% endblock %}
+	<br>
+	<hr>
+	{% if file is defined %}
+	<img src="{{ url_for(file) }}">
+	{% endif %}
+</body>
+</html>

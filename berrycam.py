@@ -10,25 +10,11 @@
 #  Raspberry Pi is a trademark of the Raspberry Pi Foundation.
 #  IOS is a trademark or registered trademark of Cisco in the U.S. and other countries and is used by Apple Inc. under license.
 
-# -------------- raspistill option -----------------
-#Exposure mode options :
-#off,auto,night,nightpreview,backlight,spotlight,sports,snow,beach,verylong,fixedfps,antishake,fireworks
-
-#AWB mode options :
-#off,auto,sun,cloud,shade,tungsten,fluorescent,incandescent,flash,horizon
-
-#Image Effect mode options :
-#none,negative,solarise,sketch,denoise,emboss,oilpaint,hatch,gpen,pastel,watercolour,film,blur,saturation,colourswap,washedout,posterise,colourpoint,colourbalance,cartoon
-
-#Metering Mode options :
-#average,spot,backlit,matrix
-# -------------- ----------------- -----------------
-
 import SimpleHTTPServer, SocketServer
 import urlparse
 import os
 
-tlFolder = "/media/usb/berrycam/timelapse/"
+tlFolderRoot = "/media/usb"
 port = 8000 # CHange this if you wish to listen on a different port
 
 class BerryCamHandler (SimpleHTTPServer.SimpleHTTPRequestHandler):
@@ -49,8 +35,6 @@ class BerryCamHandler (SimpleHTTPServer.SimpleHTTPRequestHandler):
             sa = queryParsed['sa'][0] # Set image saturation
             iso = queryParsed['iso'][0] #  Set capture ISO               
             ifx = "'" + queryParsed['ifx'][0] + "'" # Set image effect
-            #cfx = "'" + queryParsed['cfx'][0] + "'" # Set colour effect - NOT YET IMPLEMENTED IN BERRYCAM
-            #rot = queryParsed['rot'][0] # Set image rotation - NOT YET IMPLEMENTED IN BERRYCAM
             filequality = queryParsed['fquality'][0]
             filewidth = queryParsed['fwidth'][0]
             fileheight = queryParsed['fheight'][0]
@@ -63,7 +47,7 @@ class BerryCamHandler (SimpleHTTPServer.SimpleHTTPRequestHandler):
             if "tl" in queryParsed:
                 tl = queryParsed['tl'][0]
                 t = queryParsed['t'][0]
-                folder = tlFolder + str(filefolder)
+                folder = tlFolderRoot + "/berrycam/timelapse/" + str(filefolder)
                 if not os.path.exists(folder):
                     os.makedirs(folder)
             else:
@@ -71,11 +55,6 @@ class BerryCamHandler (SimpleHTTPServer.SimpleHTTPRequestHandler):
                 folder = "berrycam/" + str(filefolder)
                 if not os.path.exists(folder):
                     os.makedirs(folder)
-
-            #exifmake = queryParsed['exifmake'][0]
-            
-            #filewidth = 2592 #- ((2592/4)*filesize) # Take the values passed, divide by 4 and multiply to get new size
-            #fileheight = 1944 #- ((1944/4)*filesize) # Take the values passed, divide by 4 and multiply to get new size    
             
             # Build up a raspistill command line string
             command = "raspistill -v" # Initiate command for Raspicam
@@ -88,13 +67,20 @@ class BerryCamHandler (SimpleHTTPServer.SimpleHTTPRequestHandler):
             command += " -co " + str(co) # Define Image Contrast
             command += " -sa " + str(sa) # Define Image Saturation
             command += " -ISO " + str(iso) # Define Image ISO            
-            command += " -ifx " +   str(ifx) # Define Image Effect
-            #command += " -cfx " +   str(cfx) # Define Colour Effect - NOT YET IMPLEMENTED IN BERRYCAM
-            #command += " -rot " +   str(rot) # Define Image Rotation - NOT YET IMPLEMENTED IN BERRYCAM
+            command += " -ifx " + str(ifx) # Define Image Effect
             command += " -q " + str(filequality) # Define Image Quality
             command += " -w " + str(filewidth) # Define output image width
             command += " -h " + str(fileheight) # Define output image height
+
+            # NOT YET IMPLEMENTED IN BERRYCAM
+            #command += " -r"
             #command += " -x IFD1.Make=" + str(exifmake)  #Define Make for ESIF Data 'Raspberry Pi'
+            #command += " -cfx " +   str(cfx) # Define Colour Effect - NOT YET IMPLEMENTED IN BERRYCAM
+            #command += " -rot " +   str(rot) # Define Image Rotation - NOT YET IMPLEMENTED IN BERRYCAM
+            #exifmake = queryParsed['exifmake'][0]            
+            #filewidth = 2592 #- ((2592/4)*filesize) # Take the values passed, divide by 4 and multiply to get new size
+            #fileheight = 1944 #- ((1944/4)*filesize) # Take the values passed, divide by 4 and multiply to get new size
+            # -----    
 
             if hflip == "1":
                 command += " -hf"
@@ -109,9 +95,12 @@ class BerryCamHandler (SimpleHTTPServer.SimpleHTTPRequestHandler):
             else:
                 command += " -o " + folder + "/IMG-" + str(fileseq) +".jpg"
             
+            print "---------"
+            print command
+            print "---------"
+            
             os.system(command)
             self.processRequest(queryParsed)
-            
         else:
             # Default to serve up a local file 
             SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self);
@@ -121,7 +110,7 @@ class BerryCamHandler (SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 httpd = SocketServer.TCPServer(("", port), BerryCamHandler)
 
-print "BERRYCAM Listening on port", port
-print "Please ensure your BerryCam App is installed and running on your iOS Device"
+print("TlBox it's ok")
+print("Please ensure your BerryCam App is installed and running on your iOS Device")
 
 httpd.serve_forever()
