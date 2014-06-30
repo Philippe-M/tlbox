@@ -1,20 +1,23 @@
 #!/usr/bin/env python
 # -*-coding:UTF-8 -*
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 import os
 
 app = Flask(__name__)
+app.config["CACHE_TYPE"] = "null"
+app.secret_key = os.urandom(24)
+
 fileseq = filefolder = awb = metering = ev = exposure = sharpness = brightness = contrast = saturation = iso = imxfix = quality = raw = width = height = hflip = vflip = timelapse_active = False
-tlFolderRoot = "/media/usb"
+tlFolderRoot = "/media/usb/"
 
 @app.route('/')
 def acceuil():
-    return render_template('squelette.html')
+    return render_template('index.html')
 
 @app.route('/takepicture', methods=['POST'])
 def takepicture():
-    if request.method == 'POST':
+    if request.method == 'POST':    
         fileseq = request.form['fileseq']
         filefolder = request.form['filefolder']
         awb = request.form['awb']
@@ -35,8 +38,8 @@ def takepicture():
         vflip = request.form.getlist('vflip')
         timelapse_active = request.form.getlist('timelapse_active')
         timelapse = request.form['timelapse']
-        timeout = request.form['timeout'] 
-        
+        timeout = request.form['timeout']
+                       
         command = "raspistill -v"
         command += " --awb '" + str(awb) + "'" # Define WB
         command += " --metering '" + str(metering) + "'" # Define Metering Mode
@@ -62,24 +65,29 @@ def takepicture():
 
         # TimeLapse parameter
         if timelapse_active:
-            folder = tlFolderRoot + "/tlbox/images/timelapse/" + str(filefolder)
+            folder = tlFolderRoot + "images/timelapse/" + str(filefolder)
             if not os.path.exists(folder):
                 os.makedirs(folder)
-                command += " --timelapse " + timelapse
-                command += " --timeout " + timeout
-                command += " --output " + folder + "/\05%d.jpg"                
+            command += " --timelapse " + timelapse
+            command += " --timeout " + timeout
+            command += " --output " + folder + "/\05%d.jpg"
+
+            os.system(command)
+            return render_template('takepicture.html', timelapse_active=True, timelapse=timelapse, timeout=timeout)
         else:
-            #folder = "images/" + str(filefolder)
-            folder = "/home/pi/TlBox"
-            #if not os.path.exists(folder):
-            #    os.makedirs(folder)
-            command += " --output '" + folder + "/" + str(fileseq) +".jpg'"
+            folder = "images/" + str(filefolder)
+            if not os.path.exists(folder):
+                os.makedirs(folder)
 
-        os.system(command)        
-
-        return render_template('squelette.html', file=folder + "/" + str(fileseq) + ".jpg")
+            command += " --output '" + folder + "/" + str(fileseq) + ".jpg'"
+            os.system(command)
+            return render_template('takepicture.html', fileFolder=str(filefolder), filePicture=str(fileseq) + ".jpg")
     else:
-        return render_template('squelette.html')
+        return render_template('index.html')
+
+@app.route('/images/<fileFolder>/<filePicture>')
+def images(fileFolder, filePicture):
+    return send_file("images/" + fileFolder + "/" + filePicture, "image/jpeg")
 
 if __name__== '__main__' :
     app.run(host="0.0.0.0", debug=True)

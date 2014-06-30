@@ -1,0 +1,35 @@
+<!doctype html>
+<!--[if lte IE 7]> <html class="no-js ie67 ie678" lang="fr"> <![endif]-->
+<!--[if IE 8]> <html class="no-js ie8 ie678" lang="fr"> <![endif]-->
+<!--[if IE 9]> <html class="no-js ie9" lang="fr"> <![endif]-->
+<!--[if gt IE 9]> <!--><html class="no-js" lang="fr"> <!--<![endif]-->
+<head>
+		<meta charset="UTF-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	
+    	<!-- Bootstrap -->
+    	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    	<link href="{{ url_for('static', filename='css/slider.css') }}" rel="stylesheet">
+
+    	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    	<!--[if lt IE 9]>
+      	<script src="{{ url_for('static', filename='js/html5shiv.min.js') }}"></script>
+      	<script src="{{ url_for('static', filename='js/respond.min.js') }}"></script>
+    	<![endif]-->
+</head>
+<body>
+	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap-slider.js') }}"></script>
+	{% block corps %}
+	<div class="container-fluid">
+		<div>
+			<div>{% include 'formulaire.html' %}</div>
+			<div>{% block image %}{% endblock %}</div>
+		</div>
+	</div>
+	{% endblock %}
+</body>
+</html>

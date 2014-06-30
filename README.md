@@ -1,7 +1,6 @@
 tlbox
 =====
-
-Tools for create a TimeLapse Box with a Raspberry and Android
+Tools for create a TimeLapse Box with a Raspberry and Android and pilot with FireFox
 
 
 Install

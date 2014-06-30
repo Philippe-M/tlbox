@@ -1,0 +1,283 @@
+	<form method="post" class="form-horizontal" role="form" action="{{ url_for('takepicture') }}">
+		<div class="btn-group btn-group-sm">
+			<a href="#TlModal" role="button" class="btn btn-default btn-lg" data-toggle="modal">TimeLapse</a>
+			<div class="modal fade" id="TlModal" tabindex="-1" role="dialog" aria-labelledby="TlModalLabel">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type=button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">&times;</span>
+								<span class="sr-only">Close</span>
+							</button>
+							<h4 class="modal-title" id="TlModalLabel">TimeLapse</h4>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="timelapse_active">Activer TimeLapse</label>
+								<div class="col-md-4">
+									<input type="checkbox" name="timelapse_active">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-4 control-label">Prendre une photo toute les x ms</label>
+								<div class="form-group">
+									<input class="input-xlarge" type="text" name="timelapse">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-4 control-label">Durée de prise de vue en ms</label>
+								<div class="form-group">
+									<input class="input-xlarge" type="text" name="timeout">
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-close" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			<a href="#FileModal" role="button" class="btn btn-default btn-lg" data-toggle="modal">Fichiers</a>
+			<div class="modal fade" id="FileModal" tabindex="-1" role="dialog" aria-labelledby="FileModalLabel">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type=button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">&times;</span>
+								<span class="sr-only">Close</span>
+							</button>
+							<h4 class="modal-title" id="FileModalLabel">Fichiers</h4>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="fileseq">Nom du fichier</label>
+								<div class="col-md-4">
+									<input class="form-control" type="text" name="fileseq" placeholder="Nom du fichier">
+									<span class="help-block">Ex : img_20140629 -> img_20140629_0001, img20140629_0002...</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="fileseq">Répertoire</label>
+								<div class="col-md-4">
+									<input class="form-control" type="text" name="filefolder" placeholder="Répertoire">
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-close" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<a href="#SettingPictureModal" role="button" class="btn btn-default btn-lg" data-toggle="modal">Réglages images</a>
+			<div class="modal fade" id="SettingPictureModal" tabindex="-1" role="dialog" aria-labelledby="SettingPictureModalLabel">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type=button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">&times;</span>
+								<span class="sr-only">Close</span>
+							</button>
+							<h4 class="modal-title" id="SettingPictureModalLabel">Réglages images</h4>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="awb">Balance des blancs</label>
+								<div class="col-md-4">
+									<select name="awb" class="form-control">
+										<option value="off">Off</option>
+										<option value="auto" selected="selected">Auto</option>
+										<option value="sun">Sun</option>
+										<option value="cloud">Cloud</option>
+										<option value="shade">Shade</option>
+										<option value="tungsten">Tungsten</option>
+										<option value="fluorescent">Fluorescent</option>
+										<option value="incandescent">Incandescent</option>
+										<option value="flash">Flash</option>
+										<option value="horizon">Horizon</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="metering" class="col-md-4 control-label">metergin</label>
+								<div class="col-md-4">
+									<select name="metering" class="form-control">
+										<option value="average" selected="selected">Average</option>
+										<option value="spot">Spot</option>
+										<option value="backlit">Backlit</option>
+										<option value="matrix">Matrix</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="exposure" class="col-md-4 control-label">Exposure</label>
+								<div class="col-md-4">
+									<select name="exposure" class="form-control">
+										<option value="auto" selected="selected">Auto</option>
+										<option value="night">Night</option>
+										<option value="nightpreview">Night preview</option>
+										<option value="backlight">Backlight</option>
+										<option value="spotlight">Spotlight</option>
+										<option value="sports">Sports</option>
+										<option value="snow">Snow</option>
+										<option value="beach">Beach</option>
+										<option value="verylong">Very Long</option>
+										<option value="fixedfps">Fixed FPS</option>
+										<option value="antishake">Antishake</option>
+										<option value="fireworks">Fireworks</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="ev" class="col-md-4 control-label">Ev</label>
+								<div class="col-md-4">
+									<input class="form-control" id="ev" type="text" name="ev" data-slider-min="-10" data-slider-max="10" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
+									<span class="help-block" id="evCurrentSliderValLabel">Valeur : <span id="evSliderVal">0</span></span>
+								</div>
+								<script>
+									$("#ev").slider();
+									$("#ev").on('slide', function(slideEvt) {
+										$("#evSliderVal").text(slideEvt.value);
+									});
+								</script>
+							</div>
+							<div class="form-group">
+								<label for="sharpness" class="col-md-4 control-label">Sharpness</label>
+								<div class="col-md-4">
+									<input class="form-control" id="sharpness" type="text" name="sharpness" data-slider-min="-100" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
+									<span class="help-block" id="sharpnessCurrentSliderValLabel">Valeur : <span id="sharpnessSliderVal">0</span></span>
+								</div>						
+								<script>
+									$("#sharpness").slider();
+									$("#sharpness").on('slide', function(slideEvt) {
+										$("#sharpnessSliderVal").text(slideEvt.value);
+									});
+								</script>
+							</div>					
+							<div class="form-group">
+								<label for="brightness" class="col-md-4 control-label">Brightness</label>
+								<div class="col-md-4">
+									<input class="form-control" id="brightness" type="text" name="brightness" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
+									<span class="help-block" id="brightnessCurrentSliderValLabel">Valeur : <span id="brightnessSliderVal">0</span></span>
+								
+									<script>
+										$("#brightness").slider();
+										$("#brightness").on('slide', function(slideEvt) {
+											$("#brightnessSliderVal").text(slideEvt.value);
+										});
+									</script>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="contrast" class="col-md-4 control-label">Contrast</label>
+								<div class="col-md-4">
+									<input class="form-control" id="contrast" type="text" name="contrast" data-slider-min="-100" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
+									<span class="help-block" id="contrastCurrentSliderValLabel">Valeur : <span id="contrastSliderVal">0</span></span>
+								
+									<script>
+										$("#contrast").slider();
+										$("#contrast").on('slide', function(slideEvt) {
+											$("#contrastSliderVal").text(slideEvt.value);
+										});
+									</script>
+								</div>
+							</div>			
+							<div class="form-group">
+								<label for="saturation" class="col-md-4 control-label">Saturation</label>
+								<div class="col-md-4">
+									<input class="form-control" id="saturation" type="text" name="saturation" data-slider-min="-100" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
+									<span class="help-block" id="saturationCurrentSliderValLabel">Valeur : <span id="saturationSliderVal">0</span></span>
+								
+									<script>
+										$("#saturation").slider();
+										$("#saturation").on('slide', function(slideEvt) {
+											$("#saturationSliderVal").text(slideEvt.value);
+										});
+									</script>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="iso" class="col-md-4 control-label">iso</label>
+								<div class="col-md-4">
+									<input class="form-control" id="iso" type="text" name="iso" data-slider-min="100" data-slider-max="800" data-slider-step="10" data-slider-value="100" data-slider-tooltip="hide">
+									<span class="help-block" id="isoCurrentSliderValLabel">Valeur : <span id="isoSliderVal">100</span></span>
+								
+									<script>
+										$("#iso").slider();
+										$("#iso").on('slide', function(slideEvt) {
+											$("#isoSliderVal").text(slideEvt.value);
+										});
+									</script>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-4 control-label">Dimension</label>
+								<div class="col-md-4">
+									<input class="form-control" type="text" name="width" placeholder="Width"> x <input class="form-control" type="text" name="height" placeholder="Height">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="quality" class="col-md-4 control-label">Quality</label>
+								<div class="col-md-4">
+									<input class="form-control" id="quality" type="text" name="quality" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-value="100" data-slider-tooltip="hide">
+									<span class="help-block" id="qualityCurrentSliderValLabel">Valeur : <span id="qualitySliderVal">100</span></span>
+								
+									<script>
+										$("#quality").slider();
+										$("#quality").on('slide', function(slideEvt) {
+											$("#qualitySliderVal").text(slideEvt.value);
+										});
+									</script>
+								</div>
+							</div>	
+							<div class="form-group">
+								<label class="col-md-4 control-label">Orientation</label>
+								<div class="col-md-4">
+									<label for="hflip" class="checkbox-inline"><input type="checkbox" name="hflip">Hflip</label>
+									<label for="vflip" class="checkbox-inline"><input type="checkbox" name="vflip">Vflip</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="raw" class="col-md-4 control-label">Raw</label>
+								<div class="col-md-4">
+									<input type="checkbox" name="raw">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="imxfx" class="col-md-4 control-label">ImxFx</label>
+								<div class="col-md-4">
+									<select name="imxfx" class="form-control">
+										<option value="none" selected="selected">None</option>
+										<option value="negative">Negative</option>
+										<option value="solarise">Solarise</option>
+										<option value="sketch">Sketch</option>
+										<option value="denoise">Denoise</option>
+										<option value="emboss">Emboss</option>
+										<option value="oilpaint">Oilpant</option>
+										<option value="hatch">Hatch</option>
+										<option value="gpen">Gpen</option>
+										<option value="pastel">Pastel</option>
+										<option value="watercolour">Watercolour</option>
+										<option value="film">Film</option>
+										<option value="blur">Blur</option>
+										<option value="saturation">Saturation</option>
+										<option value="washedout">Washedout</option>
+										<option value="posterise">Posterise</option>
+										<option value="colourpoint">Colourpoint</option>
+										<option value="colourbalance">Colourbalance</option>
+										<option value="cartoon">Cartoon</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-close" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<button class="btn btn-danger">Lancer</button>
+	</form>

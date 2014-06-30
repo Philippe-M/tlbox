@@ -1,0 +1,8 @@
+{% extends "index.html" %}
+{% block image %}
+{% if timelapse_active is defined %}
+	<p>TimeLapse lancé, il sera fini dans {{ timeout }}
+{% else %}
+	<br><img class="pure-img" src="images/{{ fileFolder }}/{{ filePicture }}">
+{% endif %}
+{% endblock %}
