@@ -1,6 +1,76 @@
+	<script type=text/javascript>
+    	$(function() {
+    		$('#preview').hide();
+    		$('a#go').bind('click', function() {
+    			$('#preview').hide();
+				var awb = document.getElementById("awb");
+				var awbValue = awb.options[awb.selectedIndex].value;
+				var metering = document.getElementById("metering");
+				var meteringValue = metering.options[metering.selectedIndex].value;
+				var exposure = document.getElementById("exposure");
+				var exposureValue = exposure.options[exposure.selectedIndex].value;
+				var imxfx = document.getElementById("imxfx");
+				var imxfxValue = imxfx.options[imxfx.selectedIndex].value;
+ 				
+ 				if($('input[name="timelapse_active"]').prop('checked') == true) {
+ 					var timelapse_active = 1;
+ 				} else {
+ 					var timelapse_active = '';
+ 				}
+
+ 				if($('input[name="raw"]').prop('checked') == true) {
+ 					var raw = 1;
+ 				} else {
+ 					var raw = '';
+ 				}
+
+ 				if($('input[name="hflip"]').prop('checked') == true) {
+ 					var hflip = 1;
+ 				} else {
+ 					var hflip = '';
+ 				}
+ 				
+ 				if($('input[name="vflip"]').prop('checked') == true) {
+ 					var vflip = 1;
+ 				} else {
+ 					var vflip = '';
+ 				}
+ 				 				 				
+				$.getJSON('/takepicture', {
+					fileseq: $('input[name="fileseq"]').val(),
+					filefolder: $('input[name="filefolder"]').val(),
+        			awb: awbValue,
+        			metering: meteringValue,
+        			exposure: exposureValue,
+        			ev: $('input[name="ev"]').val(),        			
+        			sharpness: $('input[name="sharpness"]').val(),
+        			brightness: $('input[name="brightness"]').val(),
+        			contrast: $('input[name="contrast"]').val(),
+        			saturation: $('input[name="saturation"]').val(),
+        			iso: $('input[name="iso"]').val(),
+        			imxfx: imxfxValue,
+        			quality: $('input[name="quality"]').val(),
+        			raw: raw,
+        			width: $('input[name="width"]').val(),
+        			height: $('input[name="height"]').val(),
+        			hflip: hflip,
+        			vflip: vflip,
+        			timelapse_active: timelapse_active,
+        			timelapse: $('input[name="timelapse"]').val(),
+			        timeout: $('input[name="timeout"]').val()				
+				}, function(data) {
+					$('#preview').attr('src', "images/" + data.fileFolder + "/"  + data.filePicture);
+					$('#preview').hide();
+					$('#preview').fadeIn();
+ 				});
+				return false;
+			});
+		});
+	</script>		
+   	
 	<form method="post" class="form-horizontal" role="form" action="{{ url_for('takepicture') }}">
 		<div class="btn-group btn-group-sm">
-			<a href="#TlModal" role="button" class="btn btn-default btn-lg" data-toggle="modal">TimeLapse</a>
+			<a href="#TlModal" role="button" class="btn btn-warning btn-lg" data-toggle="modal">TimeLapse</a>
 			<div class="modal fade" id="TlModal" tabindex="-1" role="dialog" aria-labelledby="TlModalLabel">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -19,13 +89,13 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-4 control-label">Prendre une photo toute les x ms</label>
+								<label class="col-md-4 control-label">Prendre une photo toute les x secondes</label>
 								<div class="form-group">
 									<input class="input-xlarge" type="text" name="timelapse">
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-4 control-label">Durée de prise de vue en ms</label>
+								<label class="col-md-4 control-label">Durée de prise de vue en minutes</label>
 								<div class="form-group">
 									<input class="input-xlarge" type="text" name="timeout">
 								</div>
@@ -38,7 +108,7 @@
 				</div>
 			</div>
 		
-			<a href="#FileModal" role="button" class="btn btn-default btn-lg" data-toggle="modal">Fichiers</a>
+			<a href="#FileModal" role="button" class="btn btn-primary btn-lg" data-toggle="modal">Fichiers</a>
 			<div class="modal fade" id="FileModal" tabindex="-1" role="dialog" aria-labelledby="FileModalLabel">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -54,11 +124,11 @@
 								<label class="col-md-4 control-label" for="fileseq">Nom du fichier</label>
 								<div class="col-md-4">
 									<input class="form-control" type="text" name="fileseq" placeholder="Nom du fichier">
-									<span class="help-block">Ex : img_20140629 -> img_20140629_0001, img20140629_0002...</span>
+									<span class="help-block">Ex : img_20140629_ -> img_20140629_0001, img_20140629_0002...</span>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-4 control-label" for="fileseq">Répertoire</label>
+								<label class="col-md-4 control-label" for="filefolder">Répertoire</label>
 								<div class="col-md-4">
 									<input class="form-control" type="text" name="filefolder" placeholder="Répertoire">
 								</div>
@@ -71,7 +141,7 @@
 				</div>
 			</div>
 
-			<a href="#SettingPictureModal" role="button" class="btn btn-default btn-lg" data-toggle="modal">Réglages images</a>
+			<a href="#SettingPictureModal" role="button" class="btn btn-primary btn-lg" data-toggle="modal">Réglages images</a>
 			<div class="modal fade" id="SettingPictureModal" tabindex="-1" role="dialog" aria-labelledby="SettingPictureModalLabel">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -86,7 +156,7 @@
 							<div class="form-group">
 								<label class="col-md-4 control-label" for="awb">Balance des blancs</label>
 								<div class="col-md-4">
-									<select name="awb" class="form-control">
+									<select name="awb" id="awb" class="form-control">
 										<option value="off">Off</option>
 										<option value="auto" selected="selected">Auto</option>
 										<option value="sun">Sun</option>
@@ -103,7 +173,7 @@
 							<div class="form-group">
 								<label for="metering" class="col-md-4 control-label">metergin</label>
 								<div class="col-md-4">
-									<select name="metering" class="form-control">
+									<select name="metering" id="metering" class="form-control">
 										<option value="average" selected="selected">Average</option>
 										<option value="spot">Spot</option>
 										<option value="backlit">Backlit</option>
@@ -114,7 +184,7 @@
 							<div class="form-group">
 								<label for="exposure" class="col-md-4 control-label">Exposure</label>
 								<div class="col-md-4">
-									<select name="exposure" class="form-control">
+									<select name="exposure" id="exposure" class="form-control">
 										<option value="auto" selected="selected">Auto</option>
 										<option value="night">Night</option>
 										<option value="nightpreview">Night preview</option>
@@ -133,7 +203,7 @@
 							<div class="form-group">
 								<label for="ev" class="col-md-4 control-label">Ev</label>
 								<div class="col-md-4">
-									<input class="form-control" id="ev" type="text" name="ev" data-slider-min="-10" data-slider-max="10" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
+									<input class="form-control" id="ev" type="text" name="ev" value="0" data-slider-min="-10" data-slider-max="10" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
 									<span class="help-block" id="evCurrentSliderValLabel">Valeur : <span id="evSliderVal">0</span></span>
 								</div>
 								<script>
@@ -146,7 +216,7 @@
 							<div class="form-group">
 								<label for="sharpness" class="col-md-4 control-label">Sharpness</label>
 								<div class="col-md-4">
-									<input class="form-control" id="sharpness" type="text" name="sharpness" data-slider-min="-100" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
+									<input class="form-control" id="sharpness" type="text" value="0" name="sharpness" data-slider-min="-100" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
 									<span class="help-block" id="sharpnessCurrentSliderValLabel">Valeur : <span id="sharpnessSliderVal">0</span></span>
 								</div>						
 								<script>
@@ -159,7 +229,7 @@
 							<div class="form-group">
 								<label for="brightness" class="col-md-4 control-label">Brightness</label>
 								<div class="col-md-4">
-									<input class="form-control" id="brightness" type="text" name="brightness" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
+									<input class="form-control" id="brightness" type="text" value="50" name="brightness" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" data-slider-tooltip="hide">
 									<span class="help-block" id="brightnessCurrentSliderValLabel">Valeur : <span id="brightnessSliderVal">0</span></span>
 								
 									<script>
@@ -173,7 +243,7 @@
 							<div class="form-group">
 								<label for="contrast" class="col-md-4 control-label">Contrast</label>
 								<div class="col-md-4">
-									<input class="form-control" id="contrast" type="text" name="contrast" data-slider-min="-100" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
+									<input class="form-control" id="contrast" type="text" value="0" name="contrast" data-slider-min="-100" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
 									<span class="help-block" id="contrastCurrentSliderValLabel">Valeur : <span id="contrastSliderVal">0</span></span>
 								
 									<script>
@@ -187,7 +257,7 @@
 							<div class="form-group">
 								<label for="saturation" class="col-md-4 control-label">Saturation</label>
 								<div class="col-md-4">
-									<input class="form-control" id="saturation" type="text" name="saturation" data-slider-min="-100" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
+									<input class="form-control" id="saturation" type="text" value="0" name="saturation" data-slider-min="-100" data-slider-max="100" data-slider-step="1" data-slider-value="0" data-slider-tooltip="hide">
 									<span class="help-block" id="saturationCurrentSliderValLabel">Valeur : <span id="saturationSliderVal">0</span></span>
 								
 									<script>
@@ -201,7 +271,7 @@
 							<div class="form-group">
 								<label for="iso" class="col-md-4 control-label">iso</label>
 								<div class="col-md-4">
-									<input class="form-control" id="iso" type="text" name="iso" data-slider-min="100" data-slider-max="800" data-slider-step="10" data-slider-value="100" data-slider-tooltip="hide">
+									<input class="form-control" id="iso" type="text" value="100" name="iso" data-slider-min="100" data-slider-max="800" data-slider-step="10" data-slider-value="100" data-slider-tooltip="hide">
 									<span class="help-block" id="isoCurrentSliderValLabel">Valeur : <span id="isoSliderVal">100</span></span>
 								
 									<script>
@@ -215,13 +285,13 @@
 							<div class="form-group">
 								<label class="col-md-4 control-label">Dimension</label>
 								<div class="col-md-4">
-									<input class="form-control" type="text" name="width" placeholder="Width"> x <input class="form-control" type="text" name="height" placeholder="Height">
+									<input class="form-control" type="text" value="2592" name="width" placeholder="Width"> x <input class="form-control" type="text" value="1944" name="height" placeholder="Height">
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="quality" class="col-md-4 control-label">Quality</label>
 								<div class="col-md-4">
-									<input class="form-control" id="quality" type="text" name="quality" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-value="100" data-slider-tooltip="hide">
+									<input class="form-control" id="quality" type="text" value="100" name="quality" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-value="100" data-slider-tooltip="hide">
 									<span class="help-block" id="qualityCurrentSliderValLabel">Valeur : <span id="qualitySliderVal">100</span></span>
 								
 									<script>
@@ -248,7 +318,7 @@
 							<div class="form-group">
 								<label for="imxfx" class="col-md-4 control-label">ImxFx</label>
 								<div class="col-md-4">
-									<select name="imxfx" class="form-control">
+									<select name="imxfx" id="imxfx" class="form-control">
 										<option value="none" selected="selected">None</option>
 										<option value="negative">Negative</option>
 										<option value="solarise">Solarise</option>
@@ -279,5 +349,6 @@
 				</div>
 			</div>
 		</div>
-		<button class="btn btn-danger">Lancer</button>
+		<a href="javascript:void();" id="go" role="button" class="btn btn-danger btn-lg">Lancer</a>		
+		<!-- <button class="btn btn-danger" name="feu" type="button">Lancer</button> -->	
 	</form>

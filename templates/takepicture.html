@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% block image %}
+<span id="preview">?</span>
 {% if timelapse_active is defined %}
 	<p>TimeLapse lancé, il sera fini dans {{ timeout }}
 {% else %}

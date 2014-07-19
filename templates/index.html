@@ -23,11 +23,19 @@
 	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/bootstrap-slider.js') }}"></script>
+ 	
 	{% block corps %}
 	<div class="container-fluid">
-		<div>
+		<div class="center-block">
 			<div>{% include 'formulaire.html' %}</div>
-			<div>{% block image %}{% endblock %}</div>
+			<div>{% block image %}
+			{% if timelapse_active is defined %}
+				<p>TimeLapse fini</p>
+			{% else %}
+				<br><img class="img-responsive" id="preview" src="">
+			{% endif %}
+			{% endblock %}
+			</div>
 		</div>
 	</div>
 	{% endblock %}
